@@ -1,8 +1,11 @@
 package com.example.sign.approval.service;
 
+import com.example.sign.approval.ApprovalResult;
 import com.example.sign.approval.entity.Approval;
+import com.example.sign.approval.submit.Submit;
 import com.example.sign.event.ApproveEvent;
 import com.example.sign.event.RejectEvent;
+import com.example.sign.vo.ApprovalUser;
 
 public interface ApprovalService {
 
@@ -10,8 +13,8 @@ public interface ApprovalService {
 
     void escalate(Approval approval);
 
-    void approve(long approvalId, ApproveEvent event);
+    ApprovalResult approve(Submit submit);
 
-    void reject(long approvalId, RejectEvent event);
+    ApprovalResult reject(Submit submit);
 
 }

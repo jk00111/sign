@@ -1,7 +1,7 @@
 package com.example.sign.review.dto;
 
-import com.example.sign.document.dto.Cancel;
-import com.example.sign.line.entity.ReviewStep;
+import com.example.sign.sign.dto.Cancel;
+import com.example.sign.step.entity.ReviewStep;
 import lombok.Getter;
 
 import java.util.Set;

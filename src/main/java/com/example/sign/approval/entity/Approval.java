@@ -1,14 +1,13 @@
 package com.example.sign.approval.entity;
 
 import com.example.sign.approval.enums.ApprovalStatus;
-import com.example.sign.event.ApproveEvent;
-import com.example.sign.event.CancelEvent;
-import com.example.sign.event.RejectEvent;
-import com.example.sign.line.entity.ApprovalStep;
-import com.example.sign.vo.ApprovalUser;
+import com.example.sign.step.entity.ApprovalStep;
+import com.example.sign.step.entity.ProcessStep;
+import com.example.sign.step.enums.StepStatus;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class Approval {
@@ -16,15 +15,11 @@ public class Approval {
     private long signId;
     private long id;
     private ApprovalStatus status;
-    private ApprovalUser requester;
     private List<ApprovalStep> line;
+    private int current;
 
-    public Approval(long signId, long id, ApprovalStatus status, ApprovalUser requester, List<ApprovalStep> line) {
-        this.signId = signId;
-        this.id = id;
-        this.status = status;
-        this.requester = requester;
-        this.line = line;
+    private Approval() {
+        this.status = ApprovalStatus.EMPTY;
     }
 
     public Approval(long signId, List<ApprovalStep> line) {
@@ -33,33 +28,75 @@ public class Approval {
         this.status = ApprovalStatus.ESCALATED;
     }
 
-    public Approval(long signId, ApprovalUser requester, List<ApprovalStep> line) {
+    public Approval(long signId, long id, ApprovalStatus status, List<ApprovalStep> line) {
         this.signId = signId;
-        this.requester = requester;
+        this.id = id;
+        this.status = status;
         this.line = line;
-        this.status = ApprovalStatus.ESCALATED;
+        this.current = current();
     }
 
-    public long id() {
-        return id;
+    public void escalateLine() {
+        line.forEach(step -> step.escalate(this.id));
     }
 
-    public void approve(ApproveEvent event) {
-        this.status = ApprovalStatus.APPROVED;
-    }
+    public void approve(long userId) {
+        ApprovalStep current = getCurrent();
+        current.proceed(userId);
 
-    public void reject(RejectEvent event) {
-        if (!event.isRejected()) {
-            return;
+        if (hasNext()) {
+            ApprovalStep nextStep = line.get(this.current + 1);
+            nextStep.waiting();
         }
+
+        if (isFinish()) {
+            this.status = ApprovalStatus.APPROVED;
+        }
+    }
+
+    public void reject(long userId) {
+        ApprovalStep current = getCurrent();
+        current.reject(userId);
+
         this.status = ApprovalStatus.REJECTED;
     }
 
-    public void cancel(CancelEvent event) {
-        if (!event.isCanceled()) {
-            return;
-        }
+    public List<ApprovalStep> getUpdated() {
+        return line.stream()
+                .filter(ProcessStep::isUpdated)
+                .collect(Collectors.toList());
+    }
 
-        this.status = ApprovalStatus.CANCELED;
+    public void setLine(List<ApprovalStep> line) {
+        this.line = line;
+    }
+
+    public static Approval empty() {
+        return new Approval();
+    }
+
+    public boolean isEmpty() {
+        return ApprovalStatus.EMPTY.equals(this.status);
+    }
+
+    private ApprovalStep getCurrent(){
+        return line.get(current);
+    }
+
+    private boolean isFinish() {
+        return line.stream()
+                .allMatch(step -> StepStatus.APPROVED.equals(step.status()));
+    }
+
+    private int current() {
+        ApprovalStep current = line.stream()
+                .filter(v -> StepStatus.WAITING.equals(v.status()))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+        return line.indexOf(current);
+    }
+
+    private boolean hasNext() {
+        return current < line.size() + 1;
     }
 }

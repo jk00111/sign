@@ -1,12 +1,17 @@
 package com.example.sign.event;
 
 import com.example.sign.event.enums.EventType;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ApprovalEvent implements ApproveEvent, ReviewEvent, RejectEvent, CancelEvent {
 
+    @Getter
+    private final long id;
+
     private final EventType type;
+
 
     @Override
     public boolean isApproved() {

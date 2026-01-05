@@ -9,7 +9,4 @@ public class Escalater {
 
     private final long id;
 
-    public void toEntity() {
-
-    }
 }

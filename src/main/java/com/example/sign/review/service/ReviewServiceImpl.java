@@ -2,7 +2,7 @@ package com.example.sign.review.service;
 
 import com.example.sign.event.RejectEvent;
 import com.example.sign.event.ReviewEvent;
-import com.example.sign.line.service.LineService;
+import com.example.sign.step.service.StepService;
 import com.example.sign.review.entity.Review;
 import com.example.sign.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository repository;
-    private final LineService lineService;
+    private final StepService stepService;
 
 
     @Override
@@ -21,12 +21,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void escalate(Review review) {
-        if (review == null) {
+        if (review.isEmpty()) {
             return;
         }
 
         repository.create(review);
-        lineService.create(review.getSteps());
+
+        review.escalateLine();
+        stepService.create(review.getLine());
     }
 
     @Override

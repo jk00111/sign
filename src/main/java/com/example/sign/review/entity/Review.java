@@ -1,33 +1,33 @@
 package com.example.sign.review.entity;
 
-import com.example.sign.event.CancelEvent;
 import com.example.sign.event.RejectEvent;
 import com.example.sign.event.ReviewEvent;
-import com.example.sign.line.entity.ReviewStep;
-import com.example.sign.review.dto.ReviewDto;
+import com.example.sign.step.entity.ReviewStep;
 import com.example.sign.review.enums.ReviewStatus;
-import com.example.sign.vo.ApprovalUser;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
 
-@RequiredArgsConstructor
 @Getter
 public class Review {
 
+    private long signId;
     private long id;
-    private String contents;
     private ReviewStatus status;
-    private ApprovalUser requester;
-    private Set<ReviewStep> steps;
+    private Set<ReviewStep> line;
 
-    public long id() {
-        return id;
+    private Review() {
+        this.status = ReviewStatus.NONE;
     }
 
-    public static Review escalate(ReviewDto reviewDto, ApprovalUser requester) {
-        return new Review();
+    public Review(long signId, Set<ReviewStep> line) {
+        this.signId = signId;
+        this.line = line;
+        this.status = ReviewStatus.ESCALATED;
+    }
+
+    public void escalateLine() {
+        line.forEach(step -> step.escalate(this.id));
     }
 
     public void review(ReviewEvent event) {
@@ -41,11 +41,12 @@ public class Review {
         this.status = ReviewStatus.REJECTED;
     }
 
-    public void cancel(CancelEvent event) {
-        if (!event.isCanceled()) {
-            return;
-        }
 
-        this.status = ReviewStatus.CANCELED;
+    public static Review empty() {
+        return new Review();
+    }
+
+    public boolean isEmpty() {
+        return ReviewStatus.NONE.equals(this.status);
     }
 }
