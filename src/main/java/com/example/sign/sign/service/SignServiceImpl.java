@@ -1,10 +1,8 @@
 package com.example.sign.sign.service;
 
-import com.example.sign.approval.ApprovalResult;
+import com.example.sign.result.Result;
 import com.example.sign.approval.entity.Approval;
 import com.example.sign.approval.service.ApprovalService;
-import com.example.sign.approval.submit.Submit;
-import com.example.sign.event.ApprovalEvent;
 import com.example.sign.sign.dto.Cancel;
 import com.example.sign.sign.entity.Sign;
 import com.example.sign.sign.repository.SignRepository;
@@ -43,7 +41,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public void update(long id, ApprovalResult result) {
+    public void update(long id, Result result) {
         Sign sign = signRepository.findOne(id);
         sign.update(result);
         signRepository.update(sign);

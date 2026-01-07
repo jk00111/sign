@@ -4,7 +4,11 @@ public enum SignStatus {
 
     ESCALATED,
 
+    REVIEWING,
+
     REVIEWED,
+
+    APPROVING,
 
     APPROVED,
 

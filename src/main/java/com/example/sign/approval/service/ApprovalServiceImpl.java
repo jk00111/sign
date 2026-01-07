@@ -1,6 +1,6 @@
 package com.example.sign.approval.service;
 
-import com.example.sign.approval.ApprovalResult;
+import com.example.sign.result.Result;
 import com.example.sign.approval.entity.Approval;
 import com.example.sign.approval.repository.ApprovalRepository;
 import com.example.sign.approval.submit.Submit;
@@ -36,7 +36,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     }
 
     @Override
-    public ApprovalResult approve(Submit submit) {
+    public Result approve(Submit submit) {
         long signId = submit.getSignId();
         Approval approval = findOne(signId);
 
@@ -45,13 +45,15 @@ public class ApprovalServiceImpl implements ApprovalService {
         List<ApprovalStep> updated = approval.getUpdated();
         stepService.update(updated);
 
-        update(approval);
+        if (approval.isFinish()) {
+            approvalRepository.update(approval);
+        }
 
-        return new ApprovalResult(approval.getStatus());
+        return Result.fromApproval(approval.getStatus());
     }
 
     @Override
-    public ApprovalResult reject(Submit submit) {
+    public Result reject(Submit submit) {
         long signId = submit.getSignId();
         Approval approval = findOne(signId);
 
@@ -60,12 +62,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         List<ApprovalStep> updated = approval.getUpdated();
         stepService.update(updated);
 
-        update(approval);
-
-        return new ApprovalResult(approval.getStatus());
-    }
-
-    private void update(Approval approval) {
         approvalRepository.update(approval);
+        return Result.fromApproval(approval.getStatus());
     }
 }

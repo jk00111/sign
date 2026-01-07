@@ -1,11 +1,14 @@
 package com.example.sign.review.service;
 
-import com.example.sign.event.RejectEvent;
-import com.example.sign.event.ReviewEvent;
-import com.example.sign.step.service.StepService;
+import com.example.sign.approval.submit.Submit;
+import com.example.sign.result.Result;
 import com.example.sign.review.entity.Review;
 import com.example.sign.review.repository.ReviewRepository;
+import com.example.sign.step.entity.ReviewStep;
+import com.example.sign.step.service.StepService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -13,10 +16,12 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository repository;
     private final StepService stepService;
 
-
     @Override
-    public Review findOne(long id) {
-        return repository.findOne(id);
+    public Review findOne(long signId) {
+        Review review = repository.findBySignId(signId);
+        Set<ReviewStep> line = stepService.findByReview(review.getId());
+        review.setLine(line);
+        return review;
     }
 
     @Override
@@ -32,20 +37,28 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void review(long reviewId, ReviewEvent event) {
-        if (!event.isReviewed()) {
-            return;
+    public Result review(Submit submit) {
+        long signId = submit.getSignId();
+        Review review = findOne(signId);
+        review.review(submit);
+        Set<ReviewStep> updated = review.getUpdated();
+        stepService.update(updated);
+
+        if (review.isFinish()) {
+            repository.update(review);
         }
 
-        Review review = findOne(reviewId);
-        review.review(event);
-        repository.update(review);
+        return Result.fromReview(review.getStatus());
     }
 
     @Override
-    public void reject(long reviewId, RejectEvent event) {
-        Review review = findOne(reviewId);
-        review.reject(event);
-        repository.update(review);
+    public Result reject(Submit submit) {
+        long signId = submit.getSignId();
+        Review review = findOne(signId);
+        review.reject(submit);
+        Set<ReviewStep> updated = review.getUpdated();
+        stepService.update(updated);
+
+        return Result.fromReview(review.getStatus());
     }
 }

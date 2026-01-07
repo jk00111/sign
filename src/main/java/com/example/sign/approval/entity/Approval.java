@@ -83,7 +83,7 @@ public class Approval {
         return line.get(current);
     }
 
-    private boolean isFinish() {
+    public boolean isFinish() {
         return line.stream()
                 .allMatch(step -> StepStatus.APPROVED.equals(step.status()));
     }

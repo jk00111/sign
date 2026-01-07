@@ -1,17 +1,17 @@
 package com.example.sign.review.service;
 
-import com.example.sign.event.RejectEvent;
-import com.example.sign.event.ReviewEvent;
+import com.example.sign.approval.submit.Submit;
+import com.example.sign.result.Result;
 import com.example.sign.review.entity.Review;
 
 public interface ReviewService {
 
     void escalate(Review review);
 
-    Review findOne(long id);
+    Review findOne(long signId);
 
-    void review(long reviewId, ReviewEvent event);
+    Result review(Submit submit);
 
-    void reject(long reviewId, RejectEvent event);
+    Result reject(Submit submit);
 
 }

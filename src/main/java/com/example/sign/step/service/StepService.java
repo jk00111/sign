@@ -20,6 +20,9 @@ public interface StepService {
 
     void update(ApprovalStep step);
 
-    void update(Collection<ApprovalStep> steps);
+    void update(List<ApprovalStep> steps);
 
+    void update(ReviewStep step);
+
+    void update(Set<ReviewStep> steps);
 }

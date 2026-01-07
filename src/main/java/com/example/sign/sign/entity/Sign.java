@@ -1,10 +1,8 @@
 package com.example.sign.sign.entity;
 
-import com.example.sign.approval.ApprovalResult;
-import com.example.sign.event.ApprovalEvent;
+import com.example.sign.result.Result;
 import com.example.sign.sign.dto.Cancel;
 import com.example.sign.sign.enums.SignStatus;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -24,14 +22,8 @@ public class Sign {
         return sign;
     }
 
-    public void update(ApprovalResult result) {
-        if (result.isApproved()) {
-            this.status = SignStatus.APPROVED;
-        }
-
-        if (result.isRejected()) {
-            this.status = SignStatus.REJECTED;
-        }
+    public void update(Result result) {
+        this.status = result.getStatus();
     }
 
     public void cancel(Cancel cancel) {

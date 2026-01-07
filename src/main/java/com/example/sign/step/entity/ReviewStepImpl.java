@@ -34,16 +34,17 @@ public class ReviewStepImpl implements ReviewStep {
     }
 
     @Override
-    public void proceed(ApprovalUser user) {
-        if (validate(user)) {
+    public void proceed(long requesterId) {
+        if (validate(requesterId)) {
             return;
         }
 
         this.status = StepStatus.REVIEWED;
     }
+
     @Override
-    public void reject(ApprovalUser user) {
-        if (validate(user)) {
+    public void reject(long requesterId) {
+        if (validate(requesterId)) {
             return;
         }
 
@@ -55,7 +56,7 @@ public class ReviewStepImpl implements ReviewStep {
         return this.status;
     }
 
-    private boolean validate(ApprovalUser user) {
-        return user.getId() != reviewerId;
+    private boolean validate(long requesterId) {
+        return requesterId != reviewerId;
     }
 }
