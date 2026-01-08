@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class Result {
-
+    
     private final SignStatus status;
 
     public static Result fromApproval(ApprovalStatus status) {

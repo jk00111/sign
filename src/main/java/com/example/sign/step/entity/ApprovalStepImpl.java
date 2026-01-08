@@ -7,6 +7,7 @@ public class ApprovalStepImpl implements ApprovalStep {
     private long approvalId;
     private final long approverId;
     private StepStatus status;
+    private boolean updated;
 
     public ApprovalStepImpl(long approverId) {
         this.approverId = approverId;
@@ -31,7 +32,7 @@ public class ApprovalStepImpl implements ApprovalStep {
 
     @Override
     public boolean isUpdated() {
-        return false;
+        return this.updated;
     }
 
     @Override
@@ -41,6 +42,7 @@ public class ApprovalStepImpl implements ApprovalStep {
         }
 
         status = StepStatus.APPROVED;
+        updateCheck();
     }
 
     @Override
@@ -50,21 +52,28 @@ public class ApprovalStepImpl implements ApprovalStep {
         }
 
         status = StepStatus.REJECTED;
+        updateCheck();
     }
 
     @Override
     public void waiting() {
         status = StepStatus.WAITING;
+        updateCheck();
     }
 
     @Override
     public void pass() {
         status = StepStatus.PASSED;
+        updateCheck();
     }
 
     @Override
     public StepStatus status() {
         return status;
+    }
+
+    private void updateCheck() {
+        this.updated = true;
     }
 
     private boolean validate(long requesterId) {

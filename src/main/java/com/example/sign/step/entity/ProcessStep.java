@@ -6,14 +6,14 @@ public interface ProcessStep {
 
     long id();
 
+    StepStatus status();
+
+    void escalate(long processId);
+
     void proceed(long requesterId);
 
     void reject(long requesterId);
 
-    StepStatus status();
-
     boolean isUpdated();
-
-    void escalate(long processId);
 
 }

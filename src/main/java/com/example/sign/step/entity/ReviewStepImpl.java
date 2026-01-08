@@ -1,7 +1,6 @@
 package com.example.sign.step.entity;
 
 import com.example.sign.step.enums.StepStatus;
-import com.example.sign.vo.ApprovalUser;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +11,8 @@ public class ReviewStepImpl implements ReviewStep {
     private final long reviewerId;
 
     private StepStatus status;
+
+    private boolean updated;
 
     public ReviewStepImpl(long reviewerId) {
         this.reviewerId = reviewerId;
@@ -30,7 +31,7 @@ public class ReviewStepImpl implements ReviewStep {
 
     @Override
     public boolean isUpdated() {
-        return false;
+        return this.updated;
     }
 
     @Override
@@ -40,6 +41,7 @@ public class ReviewStepImpl implements ReviewStep {
         }
 
         this.status = StepStatus.REVIEWED;
+        updateCheck();
     }
 
     @Override
@@ -49,11 +51,16 @@ public class ReviewStepImpl implements ReviewStep {
         }
 
         this.status = StepStatus.REJECTED;
+        updateCheck();
     }
 
     @Override
     public StepStatus status() {
         return this.status;
+    }
+
+    private void updateCheck() {
+        this.updated = true;
     }
 
     private boolean validate(long requesterId) {

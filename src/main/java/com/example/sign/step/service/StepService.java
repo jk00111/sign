@@ -14,15 +14,12 @@ public interface StepService {
 
     Set<ReviewStep> findByReview(long reviewId);
 
-    void create(List<ApprovalStep> line);
+    void create(ProcessStep step);
 
-    void create(Set<ReviewStep> line);
+    void create(Collection<ProcessStep> steps);
 
-    void update(ApprovalStep step);
+    void update(ProcessStep step);
 
-    void update(List<ApprovalStep> steps);
+    void update(Collection<ProcessStep> steps);
 
-    void update(ReviewStep step);
-
-    void update(Set<ReviewStep> steps);
 }

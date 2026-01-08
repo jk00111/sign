@@ -2,11 +2,13 @@ package com.example.sign;
 
 
 import com.example.sign.escalate.*;
-import com.example.sign.vo.SignResult;
+import com.example.sign.result.SignResult;
+import com.example.sign.sign.Sign;
+import com.example.sign.submit.Submit;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ApprovalTest {
+public class SignTest {
 
     private final Sign sign;
 
@@ -23,5 +25,15 @@ public class ApprovalTest {
         ));
 
         long id = signResult.getId();
+    }
+
+    public void approveTest(long signId, long userId) {
+        SignResult result = sign.approve(Submit.ofApproval(signId, userId));
+
+    }
+
+    public void rejectTest(long signId, long userId) {
+        SignResult approvalResult = sign.reject(Submit.ofApproval(signId, userId));
+        SignResult reviewResult = sign.reject(Submit.ofReview(signId, userId));
     }
 }

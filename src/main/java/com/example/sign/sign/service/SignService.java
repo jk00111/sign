@@ -1,7 +1,7 @@
 package com.example.sign.sign.service;
 
 import com.example.sign.result.Result;
-import com.example.sign.sign.dto.Cancel;
+import com.example.sign.submit.CancelSubmit;
 import com.example.sign.sign.entity.Sign;
 import com.example.sign.escalate.Approvals;
 import com.example.sign.escalate.Escalater;
@@ -13,7 +13,7 @@ public interface SignService {
 
     void update(long id, Result result);
 
-    void cancel(Cancel dto);
+    void cancel(CancelSubmit cancel);
 
     Sign findOne(long id);
 

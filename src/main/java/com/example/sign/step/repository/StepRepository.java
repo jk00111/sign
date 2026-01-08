@@ -13,8 +13,6 @@ public interface StepRepository {
 
     void update(ProcessStep step);
 
-    void delete(ProcessStep step);
-
     ProcessStep findOne(long id);
 
     List<ApprovalStep> findByApproval(long approvalId);

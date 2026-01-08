@@ -2,7 +2,7 @@ package com.example.sign.review.enums;
 
 public enum ReviewStatus {
 
-    NONE,
+    EMPTY,
 
     ESCALATED,
 

@@ -29,32 +29,22 @@ public class StepServiceImpl implements StepService {
     }
 
     @Override
-    public void create(List<ApprovalStep> line) {
-        line.forEach(repository::create);
+    public void create(ProcessStep step) {
+        repository.create(step);
     }
 
     @Override
-    public void create(Set<ReviewStep> line) {
-        line.forEach(repository::create);
+    public void create(Collection<ProcessStep> steps) {
+        steps.forEach(repository::create);
     }
 
     @Override
-    public void update(ApprovalStep step) {
+    public void update(ProcessStep step) {
         repository.update(step);
     }
 
     @Override
-    public void update(List<ApprovalStep> steps) {
-        steps.forEach(repository::update);
-    }
-
-    @Override
-    public void update(ReviewStep step) {
-        repository.update(step);
-    }
-
-    @Override
-    public void update(Set<ReviewStep> steps) {
+    public void update(Collection<ProcessStep> steps) {
         steps.forEach(repository::update);
     }
 }

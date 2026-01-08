@@ -6,6 +6,7 @@ import com.example.sign.step.entity.ProcessStep;
 import com.example.sign.step.enums.StepStatus;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class Approval {
 
     private long signId;
+    @Getter
     private long id;
     private ApprovalStatus status;
     private List<ApprovalStep> line;
@@ -40,6 +42,10 @@ public class Approval {
         line.forEach(step -> step.escalate(this.id));
     }
 
+    public List<ProcessStep> getLine() {
+        return new ArrayList<>(this.line);
+    }
+
     public void approve(long userId) {
         ApprovalStep current = getCurrent();
         current.proceed(userId);
@@ -61,7 +67,7 @@ public class Approval {
         this.status = ApprovalStatus.REJECTED;
     }
 
-    public List<ApprovalStep> getUpdated() {
+    public List<ProcessStep> getUpdated() {
         return line.stream()
                 .filter(ProcessStep::isUpdated)
                 .collect(Collectors.toList());
@@ -86,6 +92,11 @@ public class Approval {
     public boolean isFinish() {
         return line.stream()
                 .allMatch(step -> StepStatus.APPROVED.equals(step.status()));
+    }
+
+    public boolean isRejected() {
+        return line.stream()
+                .anyMatch(step -> StepStatus.REJECTED.equals(step.status()));
     }
 
     private int current() {

@@ -1,7 +1,7 @@
 package com.example.sign.sign.entity;
 
 import com.example.sign.result.Result;
-import com.example.sign.sign.dto.Cancel;
+import com.example.sign.submit.CancelSubmit;
 import com.example.sign.sign.enums.SignStatus;
 import lombok.Getter;
 
@@ -26,7 +26,7 @@ public class Sign {
         this.status = result.getStatus();
     }
 
-    public void cancel(Cancel cancel) {
+    public void cancel(CancelSubmit cancel) {
         if (!validateRequester(cancel.getRequesterId())) {
             throw new IllegalArgumentException("unauthorized requester");
         }

@@ -3,7 +3,7 @@ package com.example.sign.sign.service;
 import com.example.sign.result.Result;
 import com.example.sign.approval.entity.Approval;
 import com.example.sign.approval.service.ApprovalService;
-import com.example.sign.sign.dto.Cancel;
+import com.example.sign.submit.CancelSubmit;
 import com.example.sign.sign.entity.Sign;
 import com.example.sign.sign.repository.SignRepository;
 import com.example.sign.escalate.Approvals;
@@ -48,9 +48,9 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public void cancel(Cancel cancel) {
-        long id = cancel.getId();
-        Sign sign = signRepository.findOne(id);
+    public void cancel(CancelSubmit cancel) {
+        long signId = cancel.getSignId();
+        Sign sign = signRepository.findOne(signId);
         sign.cancel(cancel);
         signRepository.update(sign);
     }

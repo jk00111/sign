@@ -3,7 +3,8 @@ package com.example.sign.approval.service;
 import com.example.sign.result.Result;
 import com.example.sign.approval.entity.Approval;
 import com.example.sign.approval.repository.ApprovalRepository;
-import com.example.sign.approval.submit.Submit;
+import com.example.sign.step.entity.ProcessStep;
+import com.example.sign.submit.Submit;
 import com.example.sign.step.entity.ApprovalStep;
 import com.example.sign.step.service.StepService;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApprovalServiceImpl implements ApprovalService {
 
-    private final ApprovalRepository approvalRepository;
+    private final ApprovalRepository repository;
     private final StepService stepService;
 
     @Override
-    public Approval findOne(long id) {
-        Approval approval = approvalRepository.findBySign(id);
-        List<ApprovalStep> line = stepService.findByApproval(id);
+    public Approval findOne(long signId) {
+        Approval approval = repository.findBySign(signId);
+        List<ApprovalStep> line = stepService.findByApproval(approval.getId());
         approval.setLine(line);
         return approval;
     }
@@ -29,7 +30,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         if (approval.isEmpty()) {
             return;
         }
-        approvalRepository.create(approval);
+        repository.create(approval);
 
         approval.escalateLine();
         stepService.create(approval.getLine());
@@ -42,11 +43,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 
         approval.approve(submit.getRequesterId());
 
-        List<ApprovalStep> updated = approval.getUpdated();
+        List<ProcessStep> updated = approval.getUpdated();
         stepService.update(updated);
 
         if (approval.isFinish()) {
-            approvalRepository.update(approval);
+            repository.update(approval);
         }
 
         return Result.fromApproval(approval.getStatus());
@@ -59,10 +60,13 @@ public class ApprovalServiceImpl implements ApprovalService {
 
         approval.reject(submit.getRequesterId());
 
-        List<ApprovalStep> updated = approval.getUpdated();
+        List<ProcessStep> updated = approval.getUpdated();
         stepService.update(updated);
 
-        approvalRepository.update(approval);
+        if (approval.isRejected()) {
+            repository.update(approval);
+        }
+
         return Result.fromApproval(approval.getStatus());
     }
 }

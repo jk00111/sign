@@ -1,6 +1,7 @@
 package com.example.sign.review.service;
 
-import com.example.sign.approval.submit.Submit;
+import com.example.sign.step.entity.ProcessStep;
+import com.example.sign.submit.Submit;
 import com.example.sign.result.Result;
 import com.example.sign.review.entity.Review;
 import com.example.sign.review.repository.ReviewRepository;
@@ -41,7 +42,8 @@ public class ReviewServiceImpl implements ReviewService {
         long signId = submit.getSignId();
         Review review = findOne(signId);
         review.review(submit);
-        Set<ReviewStep> updated = review.getUpdated();
+
+        Set<ProcessStep> updated = review.getUpdated();
         stepService.update(updated);
 
         if (review.isFinish()) {
@@ -56,8 +58,13 @@ public class ReviewServiceImpl implements ReviewService {
         long signId = submit.getSignId();
         Review review = findOne(signId);
         review.reject(submit);
-        Set<ReviewStep> updated = review.getUpdated();
+
+        Set<ProcessStep> updated = review.getUpdated();
         stepService.update(updated);
+
+        if (review.isRejected()) {
+            stepService.update(updated);
+        }
 
         return Result.fromReview(review.getStatus());
     }

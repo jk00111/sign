@@ -1,6 +1,5 @@
-package com.example.sign.vo;
+package com.example.sign.result;
 
-import com.example.sign.result.Result;
 import com.example.sign.sign.enums.SignStatus;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,11 @@ public class SignResult {
     }
 
     public static SignResult approved(long id, Result result) {
-        return new SignResult(id, result.isApproved() ? SignStatus.APPROVED : SignStatus.ESCALATED);
+        return new SignResult(id, result.getStatus());
+    }
+
+    public static SignResult reviewed(long id, Result result) {
+        return new SignResult(id, result.getStatus());
     }
 
     public static SignResult rejected(long id) {

@@ -1,6 +1,6 @@
 package com.example.sign.review.service;
 
-import com.example.sign.approval.submit.Submit;
+import com.example.sign.submit.Submit;
 import com.example.sign.result.Result;
 import com.example.sign.review.entity.Review;
 
