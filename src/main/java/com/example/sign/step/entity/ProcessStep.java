@@ -8,7 +8,7 @@ public interface ProcessStep {
 
     StepStatus status();
 
-    void escalate(long processId);
+    void setProcessId(long processId);
 
     void proceed(long requesterId);
 

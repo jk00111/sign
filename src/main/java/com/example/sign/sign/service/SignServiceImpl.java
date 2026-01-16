@@ -1,16 +1,14 @@
 package com.example.sign.sign.service;
 
-import com.example.sign.result.Result;
-import com.example.sign.approval.entity.Approval;
+import com.example.sign.ui.result.Result;
 import com.example.sign.approval.service.ApprovalService;
-import com.example.sign.submit.CancelSubmit;
 import com.example.sign.sign.entity.Sign;
 import com.example.sign.sign.repository.SignRepository;
 import com.example.sign.escalate.Approvals;
 import com.example.sign.escalate.Escalater;
 import com.example.sign.escalate.Reviews;
-import com.example.sign.review.entity.Review;
 import com.example.sign.review.service.ReviewService;
+import com.example.sign.ui.submit.Submit;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -22,22 +20,16 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public long escalate(Escalater escalater, Approvals approvals, Reviews reviews) {
-        long signId = write(escalater);
-
-        Approval approval = approvals.toEntity(signId);
-        approvalService.escalate(approval);
-
-        Review review = reviews.toEntity(signId);
-        reviewService.escalate(review);
-
-        return signId;
-    }
-
-    private long write(Escalater escalater) {
         Sign sign = Sign.create(escalater.getId());
         signRepository.create(sign);
 
-        return sign.getId();
+        final long signId = sign.getId();
+
+        approvalService.request(approvals.addSignId(signId));
+
+        reviewService.request(reviews.addSignId(signId));
+
+        return signId;
     }
 
     @Override
@@ -48,7 +40,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public void cancel(CancelSubmit cancel) {
+    public void cancel(Submit cancel) {
         long signId = cancel.getSignId();
         Sign sign = signRepository.findOne(signId);
         sign.cancel(cancel);

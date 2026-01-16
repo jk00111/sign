@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class Approval {
 
     private long signId;
-    @Getter
     private long id;
     private ApprovalStatus status;
     private List<ApprovalStep> line;
@@ -24,9 +23,8 @@ public class Approval {
         this.status = ApprovalStatus.EMPTY;
     }
 
-    public Approval(long signId, List<ApprovalStep> line) {
+    public Approval(long signId) {
         this.signId = signId;
-        this.line = line;
         this.status = ApprovalStatus.ESCALATED;
     }
 
@@ -36,14 +34,6 @@ public class Approval {
         this.status = status;
         this.line = line;
         this.current = current();
-    }
-
-    public void escalateLine() {
-        line.forEach(step -> step.escalate(this.id));
-    }
-
-    public List<ProcessStep> getLine() {
-        return new ArrayList<>(this.line);
     }
 
     public void approve(long userId) {
@@ -67,7 +57,7 @@ public class Approval {
         this.status = ApprovalStatus.REJECTED;
     }
 
-    public List<ProcessStep> getUpdated() {
+    public List<ApprovalStep> getUpdated() {
         return line.stream()
                 .filter(ProcessStep::isUpdated)
                 .collect(Collectors.toList());
@@ -82,7 +72,7 @@ public class Approval {
     }
 
     public boolean isEmpty() {
-        return ApprovalStatus.EMPTY.equals(this.status);
+        return ApprovalStatus.isEmpty(this.status);
     }
 
     private ApprovalStep getCurrent(){

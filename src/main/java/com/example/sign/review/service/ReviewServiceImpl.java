@@ -1,21 +1,23 @@
 package com.example.sign.review.service;
 
-import com.example.sign.step.entity.ProcessStep;
-import com.example.sign.submit.Submit;
-import com.example.sign.result.Result;
+import com.example.sign.escalate.Reviewer;
+import com.example.sign.escalate.Reviews;
+import com.example.sign.step.service.ReviewStepService;
+import com.example.sign.ui.submit.Submit;
+import com.example.sign.ui.result.Result;
 import com.example.sign.review.entity.Review;
 import com.example.sign.review.repository.ReviewRepository;
 import com.example.sign.step.entity.ReviewStep;
-import com.example.sign.step.service.StepService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository repository;
-    private final StepService stepService;
+    private final ReviewStepService stepService;
 
     @Override
     public Review findOne(long signId) {
@@ -26,15 +28,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void escalate(Review review) {
+    public void request(Reviews reviews) {
+        Review review = reviews.toEntity();
         if (review.isEmpty()) {
             return;
         }
 
         repository.create(review);
 
-        review.escalateLine();
-        stepService.create(review.getLine());
+        long reviewId = review.getId();
+
+        Set<Reviewer> added = reviews
+                .getReviewers()
+                .stream()
+                .map(reviewer -> reviewer.addReviewId(reviewId))
+                .collect(Collectors.toSet());
+        stepService.assign(added);
     }
 
     @Override
@@ -43,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = findOne(signId);
         review.review(submit);
 
-        Set<ProcessStep> updated = review.getUpdated();
+        Set<ReviewStep> updated = review.getUpdated();
         stepService.update(updated);
 
         if (review.isFinish()) {
@@ -59,7 +68,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = findOne(signId);
         review.reject(submit);
 
-        Set<ProcessStep> updated = review.getUpdated();
+        Set<ReviewStep> updated = review.getUpdated();
         stepService.update(updated);
 
         if (review.isRejected()) {

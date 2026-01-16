@@ -1,4 +1,4 @@
-package com.example.sign.result;
+package com.example.sign.ui.result;
 
 import com.example.sign.sign.enums.SignStatus;
 import lombok.Getter;
@@ -21,12 +21,8 @@ public class SignResult {
         return new SignResult(id, SignStatus.CANCELED);
     }
 
-    public static SignResult approved(long id, Result result) {
-        return new SignResult(id, result.getStatus());
-    }
-
-    public static SignResult reviewed(long id, Result result) {
-        return new SignResult(id, result.getStatus());
+    public static SignResult proceed(long id, SignStatus status) {
+        return new SignResult(id, status);
     }
 
     public static SignResult rejected(long id) {

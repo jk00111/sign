@@ -2,9 +2,9 @@ package com.example.sign;
 
 
 import com.example.sign.escalate.*;
-import com.example.sign.result.SignResult;
-import com.example.sign.sign.Sign;
-import com.example.sign.submit.Submit;
+import com.example.sign.ui.result.SignResult;
+import com.example.sign.ui.Sign;
+import com.example.sign.ui.submit.Submit;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -14,7 +14,7 @@ public class SignTest {
 
     public void escalateTest() {
         SignResult signResult = sign.escalate(
-                new ApprovalAndReviewEscalate(
+                new ApprovalEscalate(
                     new Escalater(1),
                     new Approvals(
                             new Approver(2),
@@ -27,13 +27,34 @@ public class SignTest {
         long id = signResult.getId();
     }
 
-    public void approveTest(long signId, long userId) {
-        SignResult result = sign.approve(Submit.ofApproval(signId, userId));
+    public void cancelTest(long signId, long userId) {
+        SignResult cancel = sign.cancel(
+                new Submit(signId, userId)
+        );
+    }
 
+    public void approveTest(long signId, long userId) {
+        SignResult result = sign.approvalAction()
+                .approve(
+                        new Submit(signId, userId)
+                );
+    }
+
+    public void reviewTest(long signId, long userId) {
+        SignResult result = sign.reviewAction()
+                .review(
+                        new Submit(signId, userId)
+                );
     }
 
     public void rejectTest(long signId, long userId) {
-        SignResult approvalResult = sign.reject(Submit.ofApproval(signId, userId));
-        SignResult reviewResult = sign.reject(Submit.ofReview(signId, userId));
+        SignResult approvalReject = sign.approvalAction()
+                .reject(
+                        new Submit(signId, userId));
+
+        SignResult reviewReject = sign.reviewAction()
+                .reject(
+                        new Submit(signId, userId)
+                );
     }
 }

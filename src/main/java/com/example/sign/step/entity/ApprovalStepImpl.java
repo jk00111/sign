@@ -9,7 +9,8 @@ public class ApprovalStepImpl implements ApprovalStep {
     private StepStatus status;
     private boolean updated;
 
-    public ApprovalStepImpl(long approverId) {
+    public ApprovalStepImpl(long approvalId, long approverId) {
+        this.approvalId = approvalId;
         this.approverId = approverId;
         this.status = StepStatus.NONE;
     }
@@ -21,7 +22,7 @@ public class ApprovalStepImpl implements ApprovalStep {
     }
 
     @Override
-    public void escalate(long processId) {
+    public void setProcessId(long processId) {
         this.approvalId = processId;
     }
 

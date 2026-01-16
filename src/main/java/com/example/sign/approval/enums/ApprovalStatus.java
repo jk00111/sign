@@ -12,7 +12,10 @@ public enum ApprovalStatus {
 
     REJECTED,
 
-    CANCELED,
+    CANCELED,;
 
 
+    public static boolean isEmpty(ApprovalStatus status) {
+        return EMPTY.equals(status);
+    }
 }

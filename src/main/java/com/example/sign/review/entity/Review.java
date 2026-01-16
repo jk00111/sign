@@ -1,10 +1,9 @@
 package com.example.sign.review.entity;
 
 import com.example.sign.review.enums.ReviewStatus;
-import com.example.sign.step.entity.ProcessStep;
 import com.example.sign.step.entity.ReviewStep;
 import com.example.sign.step.enums.StepStatus;
-import com.example.sign.submit.Submit;
+import com.example.sign.ui.submit.Submit;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -23,17 +22,16 @@ public class Review {
         this.status = ReviewStatus.EMPTY;
     }
 
-    public Review(long signId, Set<ReviewStep> line) {
+    public Review(long signId) {
         this.signId = signId;
-        this.line = line;
         this.status = ReviewStatus.ESCALATED;
     }
 
     public void escalateLine() {
-        line.forEach(step -> step.escalate(this.id));
+        line.forEach(step -> step.setProcessId(this.id));
     }
 
-    public Set<ProcessStep> getLine() {
+    public Set<ReviewStep> getLine() {
         return new HashSet<>(this.line);
     }
 
@@ -47,9 +45,9 @@ public class Review {
         }
     }
 
-    public Set<ProcessStep> getUpdated() {
+    public Set<ReviewStep> getUpdated() {
         return line.stream()
-                .filter(ProcessStep::isUpdated)
+                .filter(ReviewStep::isUpdated)
                 .collect(Collectors.toSet());
     }
 
@@ -71,7 +69,7 @@ public class Review {
     }
 
     public boolean isEmpty() {
-        return ReviewStatus.EMPTY.equals(this.status);
+        return ReviewStatus.isEmpty(this.status);
     }
 
     public boolean isFinish() {

@@ -13,6 +13,6 @@ public class ApprovalEscalate implements Escalate {
 
     private final Approvals approvals;
 
-    private final Reviews reviews = Reviews.empty();
+    private final Reviews reviews;
 
 }

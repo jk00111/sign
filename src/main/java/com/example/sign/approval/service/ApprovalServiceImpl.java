@@ -1,39 +1,49 @@
 package com.example.sign.approval.service;
 
-import com.example.sign.result.Result;
+import com.example.sign.escalate.Approvals;
+import com.example.sign.escalate.Approver;
+import com.example.sign.ui.result.Result;
 import com.example.sign.approval.entity.Approval;
 import com.example.sign.approval.repository.ApprovalRepository;
-import com.example.sign.step.entity.ProcessStep;
-import com.example.sign.submit.Submit;
+import com.example.sign.ui.submit.Submit;
 import com.example.sign.step.entity.ApprovalStep;
-import com.example.sign.step.service.StepService;
+import com.example.sign.step.service.ApprovalStepService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ApprovalServiceImpl implements ApprovalService {
 
     private final ApprovalRepository repository;
-    private final StepService stepService;
+    private final ApprovalStepService approvalStepService;
 
     @Override
     public Approval findOne(long signId) {
         Approval approval = repository.findBySign(signId);
-        List<ApprovalStep> line = stepService.findByApproval(approval.getId());
+        List<ApprovalStep> line = approvalStepService.findByApproval(approval.getId());
         approval.setLine(line);
         return approval;
     }
 
     @Override
-    public void escalate(Approval approval) {
+    public void request(Approvals approvals) {
+        Approval approval = approvals.toEntity();
+
         if (approval.isEmpty()) {
             return;
         }
+
         repository.create(approval);
 
-        approval.escalateLine();
-        stepService.create(approval.getLine());
+        List<Approver> approvers = approvals.getApprovers();
+        long approvalId = approval.getId();
+
+        List<Approver> added = approvers.stream()
+                .map(approver -> approver.addApprovalId(approvalId))
+                .collect(Collectors.toList());
+        approvalStepService.assign(added);
     }
 
     @Override
@@ -43,8 +53,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 
         approval.approve(submit.getRequesterId());
 
-        List<ProcessStep> updated = approval.getUpdated();
-        stepService.update(updated);
+        List<ApprovalStep> updated = approval.getUpdated();
+        approvalStepService.update(updated);
 
         if (approval.isFinish()) {
             repository.update(approval);
@@ -60,8 +70,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 
         approval.reject(submit.getRequesterId());
 
-        List<ProcessStep> updated = approval.getUpdated();
-        stepService.update(updated);
+        List<ApprovalStep> updated = approval.getUpdated();
+        approvalStepService.update(updated);
 
         if (approval.isRejected()) {
             repository.update(approval);

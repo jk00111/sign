@@ -1,4 +1,4 @@
-package com.example.sign.result;
+package com.example.sign.ui.result;
 
 import com.example.sign.approval.enums.ApprovalStatus;
 import com.example.sign.review.enums.ReviewStatus;
@@ -30,7 +30,7 @@ public class Result {
         }
 
         if (ReviewStatus.REJECTED.equals(status)) {
-            return new Result(SignStatus.REJECTED);
+           return new Result(SignStatus.REJECTED);
         }
 
         return new Result(SignStatus.REVIEWING);

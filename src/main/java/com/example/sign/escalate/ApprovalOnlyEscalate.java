@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @RequiredArgsConstructor
-public class ReviewEscalate implements Escalate {
+public class ApprovalOnlyEscalate implements Escalate {
 
     private final Escalater escalater;
 
-    private final Approvals approvals = Approvals.empty();
+    private final Approvals approvals;
 
-    private final Reviews reviews;
+    private final Reviews reviews = Reviews.empty();
 
 }

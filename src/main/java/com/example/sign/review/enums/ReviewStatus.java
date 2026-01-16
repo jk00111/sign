@@ -12,6 +12,11 @@ public enum ReviewStatus {
 
     REJECTED,
 
-    CANCELED,
+    CANCELED,;
+
+
+    public static boolean isEmpty(ReviewStatus status) {
+        return EMPTY.equals(status);
+    }
 
 }

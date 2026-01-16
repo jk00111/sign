@@ -1,12 +1,11 @@
-package com.example.sign.submit;
+package com.example.sign.ui.submit;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @Getter
 @RequiredArgsConstructor
-public class ApprovalSubmit implements Submit {
+public class Submit {
 
     private final long signId;
 

@@ -20,7 +20,7 @@ public class ReviewStepImpl implements ReviewStep {
     }
 
     @Override
-    public void escalate(long processId) {
+    public void setProcessId(long processId) {
         this.id = processId;
     }
 
