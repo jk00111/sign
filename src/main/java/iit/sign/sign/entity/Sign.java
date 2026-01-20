@@ -1,8 +1,8 @@
 package iit.sign.sign.entity;
 
-import iit.sign.ui.result.ProcessResult;
+import iit.sign.api.command.Cancel;
+import iit.sign.common.ProcessResult;
 import iit.sign.sign.enums.SignStatus;
-import iit.sign.ui.submit.Submit;
 import lombok.Getter;
 
 @Getter
@@ -26,13 +26,13 @@ public class Sign {
         this.status = processResult.getStatus();
     }
 
-    public void cancel(Submit cancel) {
-        if (!validateRequester(cancel.getDeciderId())) {
-            throw new IllegalArgumentException("unauthorized requester");
+    public void cancel(Cancel cancel) {
+        if (!validateRequester(cancel.getRequesterId())) {
+            throw new IllegalArgumentException("Only the escalater can cancel this sign request");
         }
 
         if (isProceed()) {
-            throw new IllegalStateException("proceed sign");
+            throw new IllegalStateException("Cannot cancel a sign that has already proceeded");
         }
 
         this.status = SignStatus.CANCELED;

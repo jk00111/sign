@@ -1,16 +1,18 @@
 package iit.sign.step.service;
 
-import iit.sign.escalate.Reviewer;
+import iit.sign.api.command.Reviewer;
 import iit.sign.step.entity.ReviewStep;
 import iit.sign.step.entity.ReviewStepImpl;
 import iit.sign.step.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Service
 public class ReviewStepServiceImpl implements ReviewStepService {
 
     private final StepRepository repository;

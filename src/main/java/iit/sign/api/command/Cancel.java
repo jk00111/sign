@@ -1,14 +1,14 @@
-package iit.sign.ui.submit;
+package iit.sign.api.command;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
 @RequiredArgsConstructor
-public class Submit {
+@Getter
+public class Cancel {
 
     private final long id;
 
-    private final long deciderId;
+    private final long requesterId;
 
 }

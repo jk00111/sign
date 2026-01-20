@@ -1,9 +1,9 @@
 package iit.sign.review.entity;
 
+import iit.sign.api.command.Submit;
 import iit.sign.review.enums.ReviewStatus;
 import iit.sign.step.entity.ReviewStep;
 import iit.sign.step.enums.StepStatus;
-import iit.sign.ui.submit.Submit;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -74,7 +74,7 @@ public class Review {
 
     public boolean isFinish() {
         return line.stream()
-                .anyMatch(step -> StepStatus.REJECTED.equals(step.status()));
+                .allMatch(step -> StepStatus.REVIEWED.equals(step.status()));
     }
 
     public boolean isRejected() {
@@ -83,7 +83,7 @@ public class Review {
 
     private ReviewStep getStep(long requesterId) {
         return line.stream()
-                .filter(step -> step.id() == requesterId)
+                .filter(step -> step.deciderId() == requesterId)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

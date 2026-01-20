@@ -1,4 +1,4 @@
-package iit.sign.ui.result;
+package iit.sign.api.result;
 
 import iit.sign.sign.enums.SignStatus;
 import lombok.Getter;

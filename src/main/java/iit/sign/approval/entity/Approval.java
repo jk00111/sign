@@ -97,6 +97,6 @@ public class Approval {
     }
 
     private boolean hasNext() {
-        return current < line.size() + 1;
+        return current < line.size() -1;
     }
 }

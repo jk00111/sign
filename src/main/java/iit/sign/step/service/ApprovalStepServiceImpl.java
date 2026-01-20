@@ -1,17 +1,19 @@
 package iit.sign.step.service;
 
-import iit.sign.escalate.Approver;
+import iit.sign.api.command.Approver;
 import iit.sign.step.entity.ApprovalStep;
 import iit.sign.step.entity.ApprovalStepImpl;
 import iit.sign.step.entity.ProcessStep;
 import iit.sign.step.repository.StepRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Service
 public class ApprovalStepServiceImpl implements ApprovalStepService {
 
     private final StepRepository repository;

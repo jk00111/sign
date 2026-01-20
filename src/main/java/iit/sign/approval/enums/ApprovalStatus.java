@@ -6,7 +6,7 @@ public enum ApprovalStatus {
 
     ESCALATED,
 
-    APPROVE_WAIT,
+    WAITING,
 
     APPROVED,
 

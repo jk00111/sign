@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iit.sign.step.repository.StepRepository">
+
+    <select id="findOne" resultType="Sign" parameterType="long">
+        SELECT *
+        FROM SIGN
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findByApproval" resultType="Sign" parameterType="long">
+        SELECT *
+        FROM SIGN
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findByReview" resultType="Sign" parameterType="long">
+        SELECT *
+        FROM SIGN
+        WHERE ID = #{id}
+    </select>
+
+    <insert id="create" parameterType="Sign">
+        INSERT INTO SIGN
+        VALUES (
+                #{id},
+                #{escalaterId},
+                #{status}
+               )
+    </insert>
+
+    <insert id="update" parameterType="Sign">
+        UPDATE SIGN
+        SET
+            ESCALATER_ID = #{escalaterId},
+            STATUS =  #{status}
+        WHERE ID = #{id}
+    </insert>
+</mapper>

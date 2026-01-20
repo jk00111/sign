@@ -1,7 +1,7 @@
-package iit.sign.ui;
+package iit.sign.api;
 
-import iit.sign.ui.result.SignResult;
-import iit.sign.ui.submit.Submit;
+import iit.sign.api.command.Submit;
+import iit.sign.api.result.SignResult;
 
 public interface ApprovalAction {
 

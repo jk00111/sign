@@ -1,4 +1,4 @@
-package iit.sign.ui.result;
+package iit.sign.common;
 
 import iit.sign.approval.enums.ApprovalStatus;
 import iit.sign.review.enums.ReviewStatus;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class ProcessResult {
-    
+
     private final SignStatus status;
 
     public static ProcessResult fromApproval(ApprovalStatus status) {

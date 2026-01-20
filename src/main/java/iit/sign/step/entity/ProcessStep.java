@@ -6,6 +6,8 @@ public interface ProcessStep {
 
     long id();
 
+    long deciderId();
+
     StepStatus status();
 
     void setProcessId(long processId);

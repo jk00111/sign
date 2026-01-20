@@ -1,10 +1,9 @@
 package iit.sign;
 
 
-import iit.sign.ui.result.SignResult;
-import iit.sign.ui.Sign;
-import iit.sign.ui.submit.Submit;
-import iit.sign.escalate.*;
+import iit.sign.api.Sign;
+import iit.sign.api.command.*;
+import iit.sign.api.result.SignResult;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -14,8 +13,8 @@ public class SignTest {
 
     public void escalate() {
         SignResult signResult = sign.escalate(
-                new ApprovalEscalate(
-                    new Escalater(1),
+                Escalate.reviewThenApproval(
+                    new Escalator(1),
                     new Approvals(
                             new Approver(2),
                             new Approver(3)),
@@ -29,7 +28,7 @@ public class SignTest {
 
     public void cancel(long signId, long userId) {
         SignResult cancel = sign.cancel(
-                new Submit(signId, userId)
+                new Cancel(signId, userId)
         );
     }
 

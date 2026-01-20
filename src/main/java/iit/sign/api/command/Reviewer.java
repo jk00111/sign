@@ -1,4 +1,4 @@
-package iit.sign.escalate;
+package iit.sign.api.command;
 
 import lombok.Getter;
 

@@ -1,19 +1,21 @@
 package iit.sign.review.service;
 
-import iit.sign.escalate.Reviewer;
-import iit.sign.escalate.Reviews;
+import iit.sign.api.command.Reviewer;
+import iit.sign.api.command.Reviews;
+import iit.sign.api.command.Submit;
 import iit.sign.step.service.ReviewStepService;
-import iit.sign.ui.submit.Submit;
-import iit.sign.ui.result.ProcessResult;
+import iit.sign.common.ProcessResult;
 import iit.sign.review.entity.Review;
 import iit.sign.review.repository.ReviewRepository;
 import iit.sign.step.entity.ReviewStep;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Service
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository repository;
@@ -28,7 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void request(Reviews reviews) {
+    public void escalate(Reviews reviews) {
         Review review = reviews.toEntity();
         if (review.isEmpty()) {
             return;

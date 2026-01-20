@@ -6,7 +6,9 @@ import lombok.Getter;
 @Getter
 public class ReviewStepImpl implements ReviewStep {
 
-    private long id;
+    private long stepId;
+
+    private long reviewId;
 
     private final long reviewerId;
 
@@ -21,12 +23,17 @@ public class ReviewStepImpl implements ReviewStep {
 
     @Override
     public void setProcessId(long processId) {
-        this.id = processId;
+        this.stepId = processId;
     }
 
     @Override
     public long id() {
-        return this.id;
+        return this.stepId;
+    }
+
+    @Override
+    public long deciderId() {
+        return this.reviewerId;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class ReviewStepImpl implements ReviewStep {
 
     @Override
     public void proceed(long requesterId) {
-        if (validate(requesterId)) {
+        if (!isValidDecider(requesterId)) {
             return;
         }
 
@@ -46,7 +53,7 @@ public class ReviewStepImpl implements ReviewStep {
 
     @Override
     public void reject(long requesterId) {
-        if (validate(requesterId)) {
+        if (!isValidDecider(requesterId)) {
             return;
         }
 
@@ -63,7 +70,7 @@ public class ReviewStepImpl implements ReviewStep {
         this.updated = true;
     }
 
-    private boolean validate(long requesterId) {
-        return requesterId != reviewerId;
+    private boolean isValidDecider(long requesterId) {
+        return requesterId == reviewerId;
     }
 }

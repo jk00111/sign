@@ -1,6 +1,6 @@
 package iit.sign.step.service;
 
-import iit.sign.escalate.Reviewer;
+import iit.sign.api.command.Reviewer;
 import iit.sign.step.entity.ReviewStep;
 
 import java.util.Collection;

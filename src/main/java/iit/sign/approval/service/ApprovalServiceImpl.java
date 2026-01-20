@@ -1,19 +1,21 @@
 package iit.sign.approval.service;
 
-import iit.sign.escalate.Approvals;
-import iit.sign.escalate.Approver;
-import iit.sign.ui.result.ProcessResult;
+import iit.sign.api.command.Approvals;
+import iit.sign.api.command.Approver;
+import iit.sign.api.command.Submit;
+import iit.sign.common.ProcessResult;
 import iit.sign.approval.entity.Approval;
 import iit.sign.approval.repository.ApprovalRepository;
-import iit.sign.ui.submit.Submit;
 import iit.sign.step.entity.ApprovalStep;
 import iit.sign.step.service.ApprovalStepService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Service
 public class ApprovalServiceImpl implements ApprovalService {
 
     private final ApprovalRepository repository;
@@ -21,14 +23,14 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Override
     public Approval findOne(long signId) {
-        Approval approval = repository.findBySign(signId);
+        Approval approval = repository.findBySignId(signId);
         List<ApprovalStep> line = approvalStepService.findByApproval(approval.getId());
         approval.setLine(line);
         return approval;
     }
 
     @Override
-    public void request(Approvals approvals) {
+    public void escalate(Approvals approvals) {
         Approval approval = approvals.toEntity();
 
         if (approval.isEmpty()) {

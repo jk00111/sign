@@ -4,6 +4,7 @@ import iit.sign.step.enums.StepStatus;
 
 public class ApprovalStepImpl implements ApprovalStep {
 
+    private long stepId;
     private long approvalId;
     private final long approverId;
     private StepStatus status;
@@ -28,7 +29,12 @@ public class ApprovalStepImpl implements ApprovalStep {
 
     @Override
     public long id() {
-        return this.approvalId;
+        return this.stepId;
+    }
+
+    @Override
+    public long deciderId() {
+        return this.approverId;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class ApprovalStepImpl implements ApprovalStep {
 
     @Override
     public void proceed(long requesterId) {
-        if (validate(requesterId)) {
+        if (!isValidDecider(requesterId)) {
             return;
         }
 
@@ -48,7 +54,7 @@ public class ApprovalStepImpl implements ApprovalStep {
 
     @Override
     public void reject(long requesterId) {
-        if (validate(requesterId)) {
+        if (!isValidDecider(requesterId)) {
             return;
         }
 
@@ -77,7 +83,7 @@ public class ApprovalStepImpl implements ApprovalStep {
         this.updated = true;
     }
 
-    private boolean validate(long requesterId) {
-        return this.approverId != requesterId;
+    private boolean isValidDecider(long requesterId) {
+        return this.approverId == requesterId;
     }
 }

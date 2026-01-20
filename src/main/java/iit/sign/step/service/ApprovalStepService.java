@@ -1,6 +1,6 @@
 package iit.sign.step.service;
 
-import iit.sign.escalate.Approver;
+import iit.sign.api.command.Approver;
 import iit.sign.step.entity.ApprovalStep;
 import iit.sign.step.entity.ProcessStep;
 

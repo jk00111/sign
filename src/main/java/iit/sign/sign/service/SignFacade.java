@@ -1,16 +1,20 @@
-package iit.sign.ui;
+package iit.sign.sign.service;
 
-import iit.sign.escalate.Approvals;
-import iit.sign.escalate.Escalate;
-import iit.sign.escalate.Escalater;
-import iit.sign.escalate.Reviews;
-import iit.sign.sign.service.SignService;
-import iit.sign.ui.result.SignResult;
-import iit.sign.ui.submit.Submit;
+import iit.sign.api.ApprovalAction;
+import iit.sign.api.ReviewAction;
+import iit.sign.api.Sign;
+import iit.sign.api.command.Cancel;
+import iit.sign.api.command.Approvals;
+import iit.sign.api.command.Escalate;
+import iit.sign.api.command.Escalator;
+import iit.sign.api.command.Reviews;
+import iit.sign.api.result.SignResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-public class SignImpl implements Sign {
+@Service
+public class SignFacade implements Sign {
 
     private final SignService signService;
     private final ApprovalAction approvalAction;
@@ -18,16 +22,16 @@ public class SignImpl implements Sign {
 
     @Override
     public SignResult escalate(Escalate escalate) {
-        Escalater escalater = escalate.getEscalater();
+        Escalator escalator = escalate.getEscalator();
         Approvals approvals = escalate.getApprovals();
         Reviews reviews = escalate.getReviews();
 
-        long signId = signService.escalate(escalater, approvals, reviews);
+        long signId = signService.escalate(escalator, approvals, reviews);
         return SignResult.escalated(signId);
     }
 
     @Override
-    public SignResult cancel(Submit cancel) {
+    public SignResult cancel(Cancel cancel) {
         signService.cancel(cancel);
 
         return SignResult.canceled(cancel.getId());

@@ -1,14 +1,16 @@
-package iit.sign.ui;
+package iit.sign.review.service;
 
-import iit.sign.ui.result.ProcessResult;
-import iit.sign.ui.result.SignResult;
-import iit.sign.review.service.ReviewService;
+import iit.sign.api.ReviewAction;
+import iit.sign.api.command.Submit;
+import iit.sign.api.result.SignResult;
+import iit.sign.common.ProcessResult;
 import iit.sign.sign.service.SignService;
-import iit.sign.ui.submit.Submit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-public class ReviewActionImpl implements ReviewAction {
+@Component
+public class ReviewActionFacade implements ReviewAction {
 
     private final SignService signService;
     private final ReviewService reviewService;
