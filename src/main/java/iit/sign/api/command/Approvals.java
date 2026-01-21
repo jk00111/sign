@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -17,6 +18,10 @@ public class Approvals {
 
     public Approvals(Approver... approvers) {
         this.approvers = new ArrayList<>(Arrays.asList(approvers));
+    }
+
+    public Approvals(Collection<Approver> approvers) {
+        this.approvers = new ArrayList<>(approvers);
     }
 
     private Approvals(long singId, List<Approver> approvers) {

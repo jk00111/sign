@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### claude
+/node_modules/
+**.md
+**.json

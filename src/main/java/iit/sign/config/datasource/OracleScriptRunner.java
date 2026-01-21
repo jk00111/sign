@@ -37,7 +37,7 @@ public class OracleScriptRunner implements ScriptRunner {
             }
 
         } catch (IOException e) {
-            throw new IllegalStateException("SQL 스크립트 로딩 실패", e);
+            throw new IllegalStateException("SQL script load fail : ", e);
         }
     }
 

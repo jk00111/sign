@@ -15,6 +15,10 @@ public class Reviews {
         this.reviewers = new HashSet<>(Arrays.asList(reviewers));
     }
 
+    public Reviews(Collection<Reviewer> reviewers) {
+        this.reviewers = new HashSet<>(reviewers);
+    }
+
     private Reviews(long signId, Set<Reviewer> reviewers) {
         this.signId = signId;
         this.reviewers = reviewers;

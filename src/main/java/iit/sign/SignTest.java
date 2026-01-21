@@ -6,12 +6,16 @@ import iit.sign.api.command.*;
 import iit.sign.api.result.SignResult;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 public class SignTest {
 
     private final Sign sign;
 
     public void escalate() {
+        List<Reviewer> reviewers = new ArrayList<>();
         SignResult signResult = sign.escalate(
                 Escalate.reviewThenApproval(
                     new Escalator(1),
@@ -19,9 +23,8 @@ public class SignTest {
                             new Approver(2),
                             new Approver(3)),
                     new Reviews(
-                            new Reviewer(4),
-                            new Reviewer(5))
-        ));
+                            reviewers
+        )));
 
         long id = signResult.getId();
     }
